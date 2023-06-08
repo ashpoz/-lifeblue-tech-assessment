@@ -14,6 +14,9 @@ const { element, label, name, type, placeholder, required, options } =
 <div>
   {
     () => {
+      const optionsEls = options?.map((option) => {
+        return <option value={option.value}>{option.label}</option>;
+      });
       {
         switch (element) {
           case "input":
@@ -30,16 +33,53 @@ const { element, label, name, type, placeholder, required, options } =
               </>
             );
           case "select":
-            let optionsEls = options.map((option) => {
+            let selectOptions = options?.map((option) => {
               return <option value={option.value}>{option.label}</option>;
             });
             return (
               <label class="block">
                 <span class="text-gray-700">Select</span>
                 <select name="dropdown" class="mt-1 block w-full" required>
-                  {optionsEls}
+                  {selectOptions}
                 </select>
               </label>
+            );
+          case "radio":
+            let radioOptions = options?.map((option) => {
+              return (
+                <label class="inline-flex items-center">
+                  <input
+                    type="radio"
+                    class="form-radio"
+                    name="radio"
+                    value={option.value}
+                  />
+                  <span class="ml-2">{option.label}</span>
+                </label>
+              );
+            });
+            return (
+              <div class="flex flex-col">
+                <span class="text-gray-700">{label}</span>
+                {radioOptions}
+              </div>
+            );
+          case "checkbox":
+            let checkboxOptions = options?.map((option) => {
+              return (
+                <label class="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    class="form-checkbox"
+                    name="checkbox"
+                  />
+
+                  <span class="ml-2">{option.label}</span>
+                </label>
+              );
+            });
+            return (
+              <label class="inline-flex items-center">{checkboxOptions}</label>
             );
           default:
             return;

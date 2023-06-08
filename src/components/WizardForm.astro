@@ -46,6 +46,48 @@ const formFields = [
     placeholder: "Enter the date",
     required: true,
   },
+  {
+    element: "radio",
+    name: "radio",
+    label: "Radio",
+    placeholder: "",
+    options: [
+      {
+        label: "Option 1",
+        value: "option1",
+      },
+      {
+        label: "Option 2",
+        value: "option2",
+      },
+      {
+        label: "Option 3",
+        value: "option3",
+      },
+    ],
+    required: true,
+  },
+  {
+    element: "checkbox",
+    name: "checkbox",
+    label: "Radio",
+    placeholder: "",
+    options: [
+      {
+        label: "Option 1",
+        value: "option1",
+      },
+      {
+        label: "Option 2",
+        value: "option2",
+      },
+      {
+        label: "Option 3",
+        value: "option3",
+      },
+    ],
+    required: true,
+  },
 ];
 ---
 
@@ -82,73 +124,15 @@ const formFields = [
     <h3 class="form-step-text text-xl font-bold py-4">Step 1.</h3>
 
     {
-      formFields.map((field) => {
-        // if (field.type === "text") {
-        //   return <FormField {...field} />;
-        // }
-        // switch (field.type) {
-        //   case "text":
-        //     return <FormField {...field} />;
-        //   case "email":
-        //     return <FormField {...field} />;
-        //   case "select":
-        //     return <FormField {...field} />;
-        //   case "date":
-        //     return <FormField {...field} />;
-        //   default:
-        //     return <FormField {...field} />;
-        // }
-        return <FormField {...field} />;
+      formFields.map((field, index) => {
+        return (
+          <div class="form-step" data-step={index + 1}>
+            <FormField {...field} />
+          </div>
+        );
       })
     }
 
-    <div class="form-step active" data-step="1">
-      <label class="block">
-        <span class="text-gray-700">Full name</span>
-        <input
-          name="name"
-          type="text"
-          class="mt-1 block w-full"
-          placeholder=""
-          required
-        />
-      </label>
-    </div>
-    <div class="form-step" data-step="2">
-      <label class="block">
-        <span class="text-gray-700">Email</span>
-        <input
-          name="email"
-          type="email"
-          class="mt-1 block w-full"
-          placeholder="test@test.com"
-          required
-        />
-      </label>
-    </div>
-    <div class="form-step" data-step="3">
-      <label class="block">
-        <span class="text-gray-700">Select</span>
-        <select name="dropdown" class="mt-1 block w-full" required>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-          <option value="3">Option 2</option>
-          <option value="4">Option 2</option>
-        </select>
-      </label>
-    </div>
-    <div class="form-step" data-step="4">
-      <label class="block">
-        <span class="text-gray-700">Date</span>
-        <input
-          type="date"
-          class="mt-1 block w-full"
-          name="date"
-          value="2023-06-7"
-          min="2023-06-7"
-        />
-      </label>
-    </div>
     <div class="form-nav active flex py-8">
       <button
         class="active bg-white border-indigo-700 border-2 text-indigo-700 font-bold px-4 py-2 w-full mr-2"
@@ -171,7 +155,7 @@ const formFields = [
   // form state obj
   const formState = {
     currentStep: 1,
-    totalSteps: 5,
+    totalSteps: 7,
     values: {},
   };
 
@@ -200,10 +184,11 @@ const formFields = [
   const getCookie = (name) => {
     const cookies = document.cookie.split("; ");
     const cookie = cookies.find((cookie) => cookie.startsWith(name));
-    return cookie.split("=")[1];
+    return cookie?.split("=")[1];
   };
 
   const prePopulateForm = (form, formData) => {
+    // make this work for checkbox and radio
     form.querySelectorAll("input, select").forEach((field) => {
       const name = field.name;
       const value = formData[name];
@@ -314,6 +299,7 @@ const formFields = [
       showFormStep(formStepsArray, formState.currentStep - 1);
       prePopulateForm(form, cookieData.values);
     } else {
+      showFormStep(formStepsArray, formState.currentStep - 1);
       updateProgressBar();
     }
   });
