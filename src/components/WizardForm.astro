@@ -215,7 +215,7 @@ import formFieldsData from "../data/formFieldsData.json";
     // check if the current field is valid
     const isValid = currentField?.checkValidity();
     // if not valid, show the validation message
-    currentField.reportValidity();
+    currentField?.reportValidity();
     // if the direction is next and the current step is less than the total steps
     if (direction === "next" && currentStep < totalSteps && isValid) {
       // increment the current step
