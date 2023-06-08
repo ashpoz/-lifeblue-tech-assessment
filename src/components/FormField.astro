@@ -1,0 +1,50 @@
+---
+export interface Props {
+  label: string;
+  name: string;
+  type: any;
+  placeholder: string;
+  required: boolean;
+  options: Array<Object>;
+}
+const { element, label, name, type, placeholder, required, options } =
+  Astro.props;
+---
+
+<div>
+  {
+    () => {
+      {
+        switch (element) {
+          case "input":
+            return (
+              <>
+                <span class="text-gray-700">{label}</span>
+                <input
+                  type={type}
+                  name={name}
+                  class="mt-1 block w-full"
+                  placeholder={placeholder}
+                  required={required}
+                />
+              </>
+            );
+          case "select":
+            let optionsEls = options.map((option) => {
+              return <option value={option.value}>{option.label}</option>;
+            });
+            return (
+              <label class="block">
+                <span class="text-gray-700">Select</span>
+                <select name="dropdown" class="mt-1 block w-full" required>
+                  {optionsEls}
+                </select>
+              </label>
+            );
+          default:
+            return;
+        }
+      }
+    }
+  }
+</div>

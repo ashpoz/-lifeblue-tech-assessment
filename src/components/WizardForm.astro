@@ -1,0 +1,329 @@
+---
+import FormField from "./FormField.astro";
+const formFields = [
+  {
+    element: "input",
+    name: "name",
+    label: "Full name",
+    type: "text",
+    placeholder: "Enter your name",
+    required: true,
+  },
+  {
+    element: "input",
+    name: "email",
+    label: "Email",
+    type: "email",
+    placeholder: "Enter your email",
+    required: true,
+  },
+  {
+    element: "select",
+    name: "select",
+    label: "Dropdown",
+    placeholder: "",
+    options: [
+      {
+        label: "Option 1",
+        value: "option1",
+      },
+      {
+        label: "Option 2",
+        value: "option2",
+      },
+      {
+        label: "Option 3",
+        value: "option3",
+      },
+    ],
+    required: true,
+  },
+  {
+    element: "input",
+    name: "date",
+    label: "Date",
+    type: "date",
+    placeholder: "Enter the date",
+    required: true,
+  },
+];
+---
+
+<style>
+  .form-step,
+  button[data-nav="next"],
+  button[data-nav="prev"],
+  button[type="submit"] {
+    display: none;
+  }
+
+  .form-step.active {
+    display: block;
+  }
+  .form-nav.active {
+    display: flex;
+  }
+  button[data-nav="prev"].active,
+  button[data-nav="next"].active,
+  button[type="submit"].active {
+    display: block;
+  }
+</style>
+
+<div class="max-w-3xl mx-auto py-4">
+  <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
+    <div
+      class="progress-bar bg-green-600 h-2.5 rounded-full dark:bg-green-500"
+      style="width: 0%"
+    >
+    </div>
+  </div>
+  <form action="">
+    <h3 class="form-step-text text-xl font-bold py-4">Step 1.</h3>
+
+    {
+      formFields.map((field) => {
+        // if (field.type === "text") {
+        //   return <FormField {...field} />;
+        // }
+        // switch (field.type) {
+        //   case "text":
+        //     return <FormField {...field} />;
+        //   case "email":
+        //     return <FormField {...field} />;
+        //   case "select":
+        //     return <FormField {...field} />;
+        //   case "date":
+        //     return <FormField {...field} />;
+        //   default:
+        //     return <FormField {...field} />;
+        // }
+        return <FormField {...field} />;
+      })
+    }
+
+    <div class="form-step active" data-step="1">
+      <label class="block">
+        <span class="text-gray-700">Full name</span>
+        <input
+          name="name"
+          type="text"
+          class="mt-1 block w-full"
+          placeholder=""
+          required
+        />
+      </label>
+    </div>
+    <div class="form-step" data-step="2">
+      <label class="block">
+        <span class="text-gray-700">Email</span>
+        <input
+          name="email"
+          type="email"
+          class="mt-1 block w-full"
+          placeholder="test@test.com"
+          required
+        />
+      </label>
+    </div>
+    <div class="form-step" data-step="3">
+      <label class="block">
+        <span class="text-gray-700">Select</span>
+        <select name="dropdown" class="mt-1 block w-full" required>
+          <option value="1">Option 1</option>
+          <option value="2">Option 2</option>
+          <option value="3">Option 2</option>
+          <option value="4">Option 2</option>
+        </select>
+      </label>
+    </div>
+    <div class="form-step" data-step="4">
+      <label class="block">
+        <span class="text-gray-700">Date</span>
+        <input
+          type="date"
+          class="mt-1 block w-full"
+          name="date"
+          value="2023-06-7"
+          min="2023-06-7"
+        />
+      </label>
+    </div>
+    <div class="form-nav active flex py-8">
+      <button
+        class="active bg-white border-indigo-700 border-2 text-indigo-700 font-bold px-4 py-2 w-full mr-2"
+        data-nav="prev">Back</button
+      >
+      <button
+        class="active bg-indigo-700 border-indigo-700 border-2 text-white font-bold px-4 py-2 w-full"
+        data-nav="next">Next</button
+      >
+      <button
+        type="submit"
+        class="bg-green-700 border-green-700 border-2 text-white font-bold px-4 py-2 w-full"
+        data-nav="submit">Submit</button
+      >
+    </div>
+  </form>
+</div>
+
+<script>
+  // form state obj
+  const formState = {
+    currentStep: 1,
+    totalSteps: 5,
+    values: {},
+  };
+
+  // form
+  const form = document.querySelector("form");
+
+  // get form data
+  const getFormData = (formEl) => {
+    const formData = new FormData(formEl);
+    const data = Object.fromEntries(formData.entries());
+    return data;
+  };
+
+  // form steps
+  const formSteps = document.querySelectorAll(".form-step");
+  const formStepsArray = Array.from(formSteps);
+
+  // form navigation buttons
+  const formNavButtons = document.querySelectorAll("[data-nav]");
+  const formNavButtonsArray = Array.from(formNavButtons);
+
+  const updateCookie = (name, value) => {
+    document.cookie = `${name}=${value}`;
+  };
+
+  const getCookie = (name) => {
+    const cookies = document.cookie.split("; ");
+    const cookie = cookies.find((cookie) => cookie.startsWith(name));
+    return cookie.split("=")[1];
+  };
+
+  const prePopulateForm = (form, formData) => {
+    form.querySelectorAll("input, select").forEach((field) => {
+      const name = field.name;
+      const value = formData[name];
+      field.value = value;
+    });
+  };
+
+  // show form step function
+  const showFormStep = (formStepEls: Array<Element>, index: number) => {
+    // if the index is equal to the length of the form steps
+    // show all steps
+    // else show the current step and hide the rest
+
+    console.log(index);
+    if (formStepEls.length === index) {
+      document
+        .querySelector("button[data-nav='next']")
+        .classList.remove("active");
+      document
+        .querySelector("button[data-nav='submit']")
+        .classList.add("active");
+
+      formStepEls.forEach((step: Element) => {
+        step.classList.add("active");
+      });
+    } else {
+      document.querySelector("button[data-nav='next']").classList.add("active");
+      document
+        .querySelector("button[data-nav='submit']")
+        .classList.remove("active");
+
+      formStepEls.forEach((step: Element) => {
+        step.classList.remove("active");
+      });
+      formStepEls[index].classList.add("active");
+    }
+  };
+
+  const updateProgressBar = () => {
+    const progressBar = document.querySelector(".progress-bar");
+
+    const currentStep = formState.currentStep;
+    const totalSteps = formState.totalSteps;
+
+    const percent = (currentStep / totalSteps) * 100;
+
+    progressBar.style.width = `${percent}%`;
+  };
+
+  // form navigation function
+  const formNav = (e: { target: HTMLElement }) => {
+    // get the button that was clicked
+    const button = e.target;
+
+    // get the direction of the button
+    const direction = button.dataset.nav;
+
+    // get the current step
+    const currentStep = formState.currentStep;
+
+    // get the total steps
+    const totalSteps = formState.totalSteps;
+
+    // check if the current step is valid
+    const currentField = form
+      ?.querySelector(`.form-step[data-step="${currentStep}"]`)
+      ?.querySelector("input, select, textarea, radio, checkbox");
+
+    // check if the current field is valid
+    const isValid = currentField?.checkValidity();
+
+    // if the direction is next and the current step is less than the total steps
+    if (direction === "next" && currentStep < totalSteps && isValid) {
+      // increment the current step
+      formState.currentStep++;
+      updateProgressBar();
+
+      // if the direction is prev and the current step is greater than 1
+    } else if (direction === "prev" && currentStep > 1) {
+      // decrement the current step
+      formState.currentStep--;
+      updateProgressBar();
+    }
+
+    // if the direction is submit, submit form
+    if (direction === "submit") {
+      formState.values = getFormData(form);
+      console.log(formState);
+    }
+
+    // update form state
+    formState.values = getFormData(form);
+
+    // update the cookie
+    updateCookie("formState", JSON.stringify(formState));
+
+    // show the current step
+    showFormStep(formStepsArray, formState.currentStep - 1);
+  };
+
+  window.addEventListener("load", () => {
+    const cookie = getCookie("formState");
+    if (cookie) {
+      const cookieData = JSON.parse(cookie);
+      formState.currentStep = cookieData.currentStep;
+      formState.values = cookieData.values;
+      updateProgressBar();
+      showFormStep(formStepsArray, formState.currentStep - 1);
+      prePopulateForm(form, cookieData.values);
+    } else {
+      updateProgressBar();
+    }
+  });
+
+  // form navigation event listener
+  formNavButtonsArray.forEach((button) => {
+    button.addEventListener("click", formNav);
+  });
+
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+  });
+</script>
