@@ -1,0 +1,170 @@
+[
+  {
+    "element": "input",
+    "name": "name",
+    "label": "Full name",
+    "type": "text",
+    "placeholder": "Enter your name",
+    "options": [],
+    "required": true
+  },
+  {
+    "element": "input",
+    "name": "email",
+    "label": "Email",
+    "type": "email",
+    "placeholder": "Enter your email",
+    "options": [],
+    "required": true
+  },
+  {
+    "element": "select",
+    "name": "yard",
+    "label": "Do you have a yard?",
+    "type": "",
+    "placeholder": "",
+    "options": [
+      {
+        "label": "Yes",
+        "value": "yes"
+      },
+      {
+        "label": "No",
+        "value": "no"
+      },
+      {
+        "label": "No, but I'm willing to walk my dog a lot",
+        "value": "walk"
+      }
+    ],
+    "required": true
+  },
+  {
+    "element": "radio",
+    "name": "age",
+    "label": "What is your preferred dog age?",
+    "type": "",
+    "placeholder": "",
+    "options": [
+      {
+        "label": "Less than 1 year",
+        "value": "young"
+      },
+      {
+        "label": "Over 5 years",
+        "value": "older"
+      },
+      {
+        "label": "Not sure",
+        "value": "unsure"
+      }
+    ],
+    "required": true
+  },
+  {
+    "element": "input",
+    "name": "date",
+    "label": "When do you want to adopt?",
+    "type": "date",
+    "placeholder": "Enter date",
+    "options": [],
+    "required": true
+  },
+  {
+    "element": "input",
+    "name": "dog-name",
+    "label": "Do you have a dog name in mind?",
+    "type": "text",
+    "placeholder": "Dog's name",
+    "options": [],
+    "required": true
+  },
+  {
+    "element": "radio",
+    "name": "where-do-you-live",
+    "label": "Where do you live?",
+    "type": "",
+    "placeholder": "",
+    "options": [
+      {
+        "label": "Austin, TX",
+        "value": "austin"
+      },
+      {
+        "label": "Dallas, TX",
+        "value": "dallas"
+      },
+      {
+        "label": "Somewhere else",
+        "value": "elsewhere"
+      }
+    ],
+    "required": true
+  },
+  {
+    "element": "checkbox",
+    "name": "why-do-you-love-chihuahuas",
+    "label": "Why do you love Chihuahuas? (select all that apply)",
+    "type": "",
+    "placeholder": "",
+    "options": [
+      {
+        "label": "They're cute!",
+        "value": "cute"
+      },
+      {
+        "label": "They're funny!",
+        "value": "funny"
+      },
+      {
+        "label": "They're good guard dogs!",
+        "value": "security"
+      }
+    ],
+    "required": true
+  },
+  {
+    "element": "checkbox",
+    "name": "what-type",
+    "label": "What type of dog are you looking for? (select all that apply)",
+    "type": "",
+    "placeholder": "",
+    "options": [
+      {
+        "label": "Short hair",
+        "value": "short-hair"
+      },
+      {
+        "label": "Long hair",
+        "value": "long-hair"
+      },
+      {
+        "label": "Other",
+        "value": "other"
+      }
+    ],
+    "required": true
+  },
+  {
+    "element": "select",
+    "name": "hear-about-us",
+    "label": "How did you hear about us?",
+    "type": "",
+    "placeholder": "",
+    "options": [
+      {
+        "label": "Online",
+        "value": "online"
+      },
+      {
+        "label": "From a friend",
+        "value": "friend"
+      },
+      {
+        "label": "Other",
+        "value": "other"
+      }
+    ],
+    "required": true
+  }
+]

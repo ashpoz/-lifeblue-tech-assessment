@@ -1,101 +1,14 @@
 ---
 import FormField from "./FormField.astro";
-const formFields = [
-  {
-    element: "input",
-    name: "name",
-    label: "Full name",
-    type: "text",
-    placeholder: "Enter your name",
-    required: true,
-  },
-  {
-    element: "input",
-    name: "email",
-    label: "Email",
-    type: "email",
-    placeholder: "Enter your email",
-    required: true,
-  },
-  {
-    element: "select",
-    name: "select",
-    label: "Dropdown",
-    placeholder: "",
-    options: [
-      {
-        label: "Option 1",
-        value: "option1",
-      },
-      {
-        label: "Option 2",
-        value: "option2",
-      },
-      {
-        label: "Option 3",
-        value: "option3",
-      },
-    ],
-    required: true,
-  },
-  {
-    element: "input",
-    name: "date",
-    label: "Date",
-    type: "date",
-    placeholder: "Enter the date",
-    required: true,
-  },
-  {
-    element: "radio",
-    name: "radio",
-    label: "Radio",
-    placeholder: "",
-    options: [
-      {
-        label: "Option 1",
-        value: "option1",
-      },
-      {
-        label: "Option 2",
-        value: "option2",
-      },
-      {
-        label: "Option 3",
-        value: "option3",
-      },
-    ],
-    required: true,
-  },
-  {
-    element: "checkbox",
-    name: "checkbox",
-    label: "Radio",
-    placeholder: "",
-    options: [
-      {
-        label: "Option 1",
-        value: "option1",
-      },
-      {
-        label: "Option 2",
-        value: "option2",
-      },
-      {
-        label: "Option 3",
-        value: "option3",
-      },
-    ],
-    required: true,
-  },
-];
+import formFieldsData from "../data/formFieldsData.json";
 ---
 
 <style>
   .form-step,
   button[data-nav="next"],
   button[data-nav="prev"],
-  button[type="submit"] {
+  button[type="submit"],
+  .submission-message {
     display: none;
   }
 
@@ -107,26 +20,35 @@ const formFields = [
   }
   button[data-nav="prev"].active,
   button[data-nav="next"].active,
-  button[type="submit"].active {
+  button[type="submit"].active,
+  .submission-message.active {
     display: block;
   }
 </style>
 
-<div class="max-w-3xl mx-auto py-4">
-  <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
-    <div
-      class="progress-bar bg-green-600 h-2.5 rounded-full dark:bg-green-500"
-      style="width: 0%"
-    >
-    </div>
-  </div>
+<div class="max-w-3xl mx-auto">
   <form action="">
+    <div class="text-center py-6">
+      <h2 class="sm:text-5xl text-3xl font-bold py-6">Pet Application Form</h2>
+      <p class="text-xl">
+        Please fill out the following application to foster one of our amazing
+        pets!
+      </p>
+    </div>
+    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
+      <div
+        class="progress-bar bg-green-600 h-2.5 rounded-full dark:bg-green-500"
+        style="width: 0%"
+      >
+      </div>
+    </div>
     <h3 class="form-step-text text-xl font-bold py-4">Step 1.</h3>
 
     {
-      formFields.map((field, index) => {
+      // loop through form fields
+      formFieldsData.map((field, index) => {
         return (
-          <div class="form-step" data-step={index + 1}>
+          <div class="form-step py-4" data-step={index + 1}>
             <FormField {...field} />
           </div>
         );
@@ -135,6 +57,7 @@ const formFields = [
 
     <div class="form-nav active flex py-8">
       <button
+        type="button"
         class="active bg-white border-indigo-700 border-2 text-indigo-700 font-bold px-4 py-2 w-full mr-2"
         data-nav="prev">Back</button
       >
@@ -149,47 +72,67 @@ const formFields = [
       >
     </div>
   </form>
+  <div class="submission-message py-8">
+    <p class="text-center">
+      <span class="block text-4xl font-bold">Thanks for your application!</span>
+      <span class="block py-3 text-lg"
+        >We will get back to you as soon as we can.</span
+      >
+      <span class="text-6xl block">🐶</span>
+    </p>
+  </div>
 </div>
 
 <script>
+  import { updateCookie, getCookie, updateText } from "../lib/helper";
+
+  // STATE
+
   // form state obj
   const formState = {
     currentStep: 1,
-    totalSteps: 7,
+    totalSteps: 11,
     values: {},
   };
+
+  // FORM ELEMENTS
 
   // form
   const form = document.querySelector("form");
 
-  // get form data
-  const getFormData = (formEl) => {
-    const formData = new FormData(formEl);
-    const data = Object.fromEntries(formData.entries());
-    return data;
-  };
-
   // form steps
   const formSteps = document.querySelectorAll(".form-step");
+  const formStepText = document.querySelector(".form-step-text");
   const formStepsArray = Array.from(formSteps);
 
   // form navigation buttons
   const formNavButtons = document.querySelectorAll("[data-nav]");
   const formNavButtonsArray = Array.from(formNavButtons);
+  const prevButton = document.querySelector("button[data-nav='prev']");
+  const nextButton = document.querySelector("button[data-nav='next']");
+  const submitButton = document.querySelector("button[type='submit']");
 
-  const updateCookie = (name, value) => {
-    document.cookie = `${name}=${value}`;
+  // FORM FUNCTIONS
+
+  // get form data
+  const getFormData = (formEl: HTMLFormElement) => {
+    const formData = new FormData(formEl);
+    const data = Object.fromEntries(formData.entries());
+
+    return data;
   };
 
-  const getCookie = (name) => {
-    const cookies = document.cookie.split("; ");
-    const cookie = cookies.find((cookie) => cookie.startsWith(name));
-    return cookie?.split("=")[1];
-  };
-
-  const prePopulateForm = (form, formData) => {
+  // pre populate form fields
+  const prePopulateForm = (form: HTMLFormElement, formData: any) => {
     // make this work for checkbox and radio
-    form.querySelectorAll("input, select").forEach((field) => {
+    form.querySelectorAll("input, select").forEach((field: any) => {
+      if (field.type === "radio") {
+        field.checked = formData[field.name] === field.value;
+        return;
+      } else if (field.type === "checkbox") {
+        field.checked = formData[field.name] === "on";
+        return;
+      }
       const name = field.name;
       const value = formData[name];
       field.value = value;
@@ -202,23 +145,33 @@ const formFields = [
     // show all steps
     // else show the current step and hide the rest
 
-    console.log(index);
     if (formStepEls.length === index) {
-      document
-        .querySelector("button[data-nav='next']")
-        .classList.remove("active");
-      document
-        .querySelector("button[data-nav='submit']")
-        .classList.add("active");
+      nextButton?.classList.remove("active");
+      submitButton?.classList.add("active");
+
+      updateText(
+        formStepText as HTMLElement,
+        `Check your results before submitting:`
+      );
 
       formStepEls.forEach((step: Element) => {
         step.classList.add("active");
       });
+    } else if (index === 0) {
+      prevButton?.classList.remove("active");
+
+      updateText(formStepText as HTMLElement, `Step ${index + 1}.`);
+
+      formStepEls.forEach((step: Element) => {
+        step.classList.remove("active");
+      });
+      formStepEls[index].classList.add("active");
     } else {
-      document.querySelector("button[data-nav='next']").classList.add("active");
-      document
-        .querySelector("button[data-nav='submit']")
-        .classList.remove("active");
+      prevButton?.classList.add("active");
+      nextButton?.classList.add("active");
+      submitButton?.classList.remove("active");
+
+      updateText(formStepText as HTMLElement, `Step ${index + 1}.`);
 
       formStepEls.forEach((step: Element) => {
         step.classList.remove("active");
@@ -227,6 +180,7 @@ const formFields = [
     }
   };
 
+  // update form progress bar
   const updateProgressBar = () => {
     const progressBar = document.querySelector(".progress-bar");
 
@@ -235,16 +189,16 @@ const formFields = [
 
     const percent = (currentStep / totalSteps) * 100;
 
-    progressBar.style.width = `${percent}%`;
+    (progressBar as HTMLElement).style.width = `${percent}%`;
   };
 
   // form navigation function
-  const formNav = (e: { target: HTMLElement }) => {
+  const formNav = (e: MouseEvent) => {
     // get the button that was clicked
-    const button = e.target;
+    const button = e.target as HTMLButtonElement;
 
     // get the direction of the button
-    const direction = button.dataset.nav;
+    const direction = button?.dataset.nav;
 
     // get the current step
     const currentStep = formState.currentStep;
@@ -255,7 +209,7 @@ const formFields = [
     // check if the current step is valid
     const currentField = form
       ?.querySelector(`.form-step[data-step="${currentStep}"]`)
-      ?.querySelector("input, select, textarea, radio, checkbox");
+      ?.querySelector("input, select, textarea") as HTMLInputElement;
 
     // check if the current field is valid
     const isValid = currentField?.checkValidity();
@@ -275,12 +229,15 @@ const formFields = [
 
     // if the direction is submit, submit form
     if (direction === "submit") {
-      formState.values = getFormData(form);
-      console.log(formState);
+      formState.values = getFormData(form as any);
+      // update form submission msg
+      const submissionMessage = document.querySelector(".submission-message");
+      submissionMessage?.classList.add("active");
+      form?.classList.add("hidden");
     }
 
     // update form state
-    formState.values = getFormData(form);
+    formState.values = getFormData(form as any);
 
     // update the cookie
     updateCookie("formState", JSON.stringify(formState));
@@ -289,16 +246,24 @@ const formFields = [
     showFormStep(formStepsArray, formState.currentStep - 1);
   };
 
+  // EVENT LISTENERS
+
+  // on load fns
   window.addEventListener("load", () => {
+    // check if there is a cookie
     const cookie = getCookie("formState");
     if (cookie) {
       const cookieData = JSON.parse(cookie);
+      // update form state
       formState.currentStep = cookieData.currentStep;
       formState.values = cookieData.values;
+
+      // update form ui els (fields, progress bar, form step))
       updateProgressBar();
       showFormStep(formStepsArray, formState.currentStep - 1);
-      prePopulateForm(form, cookieData.values);
+      prePopulateForm(form as any, cookieData.values);
     } else {
+      // show the first step
       showFormStep(formStepsArray, formState.currentStep - 1);
       updateProgressBar();
     }
@@ -306,9 +271,10 @@ const formFields = [
 
   // form navigation event listener
   formNavButtonsArray.forEach((button) => {
-    button.addEventListener("click", formNav);
+    button.addEventListener("click", formNav as EventListener);
   });
 
+  // prevent form submission
   form?.addEventListener("submit", (e) => {
     e.preventDefault();
   });

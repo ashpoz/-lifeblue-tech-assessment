@@ -1,24 +1,36 @@
-<div class="container mx-auto py-24">
+---
+import heroImage from "../assets/chi-hero-image.jpg";
+---
+
+<div class="container max-w-7xl mx-auto py-20">
   <div class="lg:columns-2 gap-6">
     <div class="flex flex-col">
-      <h1 class="text-6xl font-bold py-6">Lifeblue Technical Assessment</h1>
+      <h1 class="sm:text-6xl text-5xl font-bold py-8">
+        <span>Meet Your New</span>
+        <br />
+        <span
+          class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-700"
+          >Best Friend</span
+        >
+      </h1>
       <p class="text-xl">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eligendi
-        architecto ad, corporis doloremque hic et consectetur dolor nobis.
+        Chihuahua Haven is a compassionate and dedicated rescue organization,
+        providing a safe haven for Chihuahuas in need, where they are nurtured,
+        rehabilitated, and ultimately connected with loving forever homes.
       </p>
-      <div class="flex gap-4 text-xl py-6">
+      <div class="flex gap-4 text-xl py-10">
         <a
           class="bg-indigo-700 border-indigo-700 border-2 text-white font-bold px-8 py-4"
-          href="#form">Fill Out the Quiz</a
-        >
-        <a
-          class="bg-white border-indigo-700 border-2 text-indigo-700 font-bold px-8 py-4"
-          href="">About Us</a
+          href="#form">Apply Now</a
         >
       </div>
     </div>
-    <div class="flex justify-center">
-      <img src="http://via.placeholder.com/400" alt="" />
+    <div class="hidden lg:flex justify-center rounded mx-auto px-12">
+      <img
+        class="object-contain"
+        src={heroImage}
+        alt="Chihuahua image with blue background"
+      />
     </div>
   </div>
 </div>
