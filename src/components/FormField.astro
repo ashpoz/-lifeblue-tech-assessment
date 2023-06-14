@@ -49,7 +49,7 @@ const { element, label, name, type, placeholder, required, options } =
           case "radio":
             let radioOptions = options?.map((option: any) => {
               return (
-                <label class="inline-flex items-center">
+                <label class="inline-flex items-center cursor-pointer">
                   <input
                     type="radio"
                     class="form-radio"
@@ -69,7 +69,10 @@ const { element, label, name, type, placeholder, required, options } =
           case "checkbox":
             let checkboxOptions = options?.map((option: any) => {
               return (
-                <label for={option.value} class="inline-flex items-center">
+                <label
+                  id={option.value}
+                  class="inline-flex items-center cursor-pointer"
+                >
                   <input
                     type="checkbox"
                     class="form-checkbox"
