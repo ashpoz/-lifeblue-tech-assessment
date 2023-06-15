@@ -124,7 +124,7 @@ import formFieldsData from "../data/formFieldsData.json";
   };
 
   // pre populate form fields
-  const prePopulateForm = (form: HTMLFormElement, formData: any) => {
+  const prePopulateForm = (form: HTMLFormElement, formData: Array<Object>) => {
     // make this work for checkbox and radio
     form.querySelectorAll("input, select").forEach((field: any) => {
       if (field.type === "radio") {
@@ -263,7 +263,7 @@ import formFieldsData from "../data/formFieldsData.json";
       // update form ui els (fields, progress bar, form step))
       updateProgressBar();
       showFormStep(formStepsArray, formState.currentStep - 1);
-      prePopulateForm(form as any, cookieData.values);
+      prePopulateForm(form as HTMLFormElement, cookieData.values);
     } else {
       // show the first step
       showFormStep(formStepsArray, formState.currentStep - 1);
